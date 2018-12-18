@@ -1,59 +1,50 @@
-const { readFile, writeFile, open, write, close } = require("fs");
+const { readFile, writeFile } = require("fs");
 
-readFile('./manifest.json',(err, data) => {
-    if (err)
-        throw err;
+try {
+	readFile('./manifest.json', (err, data) => {
+		if (err)
+			throw err;
 
-    const files = JSON.parse(data);
-    let n = 0;
+		const files = JSON.parse(data);
+		let n = 0;
 
-     files.forEach((item, index, array) => {
-        const { file, metadata } = item;
-        let buffer = null;
+		files.forEach((item, index, array) => {
+			const { file, metadata } = item;
+			let buffer = null;
 
-        readFile(file, (err, data) => {
-            if (err)
-                throw err;
+			readFile(file, (err, data) => {
+				if (err)
+					throw err;
 
-            buffer = data;
-        });
+				buffer = data;
+			});
 
-        readFile(metadata, (err, data) => {
-            if (err)
-                throw err;
+			readFile(metadata, (err, data) => {
+				if (err)
+					throw err;
 
-            const { contentType, extension, name } = JSON.parse(data);
+				const { contentType, extension, name } = JSON.parse(data);
+				const path = 'output.callback/' + name + "." + extension;
 
-            const path = 'output.callback/' + name + "." + extension;
+				writeFile(path, buffer, (err) => {
+					if (err)
+						throw err;
+					n++;
+					console.log(`File ${name}.${extension} has been saved`);
+					if (n === files.length)
+						console.log(`Done copying ${n} files`);
 
-            open(path, 'wx', (err, fd) => {
-                if (err && err.code === 'EEXIST')
-                    console.log(`File ${name}.${extension} already exists.`);
-                else if (err)
-                    console.log(err);
-                else
-                    write(fd, buffer, 0, buffer.length, null, (err) => {
-                        if (err)
-                            throw err;
+				})
 
-                        n++;
-                        console.log(`File ${extension} has been saved`);
+			});
 
-                        if (index === array.length - 1)
-                            console.log(`Done copying ${n} files`);
-
-                        close(fd, () => {});
-                    });
-
-                if (index === array.length - 1 && err)
-                    console.log(`Done copying ${n} filess`);
-            });
-        });
-
-    });
+		});
 
 
 
-});
+	});
 
 
+} catch (err) {
+	console.log(err)
+}
