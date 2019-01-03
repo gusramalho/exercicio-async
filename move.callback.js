@@ -8,7 +8,7 @@ try {
 		const files = JSON.parse(data);
 		let n = 0;
 
-		files.forEach((item, index, array) => {
+		files.forEach(item  => {
 			const { file, metadata } = item;
 			let buffer = null;
 
@@ -23,17 +23,16 @@ try {
 				if (err)
 					throw err;
 
-				const { contentType, extension, name } = JSON.parse(data);
+				const { extension, name } = JSON.parse(data);
 				const path = 'output.callback/' + name + "." + extension;
 
-				writeFile(path, buffer, (err) => {
+				writeFile(path, buffer, err => {
 					if (err)
 						throw err;
 					n++;
 					console.log(`File ${name}.${extension} has been saved`);
 					if (n === files.length)
 						console.log(`Done copying ${n} files`);
-
 				})
 
 			});

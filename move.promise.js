@@ -11,7 +11,7 @@ const writeFile = (path, data) =>
   );
 
 readFile('./manifest.json')
-  .then(data => JSON.parse(data))
+  .then(data => data.json())
   .then(files => {
     
     let n = 0;
@@ -23,7 +23,7 @@ readFile('./manifest.json')
       .then(data => {
         
         readFile(metadata)
-        .then(res => JSON.parse(res))
+        .then(res => res.json())
         .then(metadata => {
           const { contentType, extension, name} = metadata;
           const path = 'output.promise/' + name + "." + extension;
@@ -33,7 +33,7 @@ readFile('./manifest.json')
               n++;
               console.log(`File ${name}.${extension} has been saved`);
               if (n === files.length)
-                console.log(`Done copying ${n} filess`);
+                console.log(`Done copying ${n} files`);
             })
             .catch(err => console.log(err));
 
