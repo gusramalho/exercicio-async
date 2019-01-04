@@ -12,6 +12,7 @@ const writeFile = (path, data) =>
 
 const readJSON = path => readFile(path).then(data => JSON.parse(data.toString()));
 
+
 readJSON('./manifest.json')
   .then(files => Promise.all(files.map(file => 
     readJSON(file.metadata)
