@@ -10,9 +10,7 @@ const writeFile = (path, data) =>
     fs.writeFile(path, data, (err, data) => err ? reject(err) : resolve(data))
   );
 
-
 const readJSON = path => readFile(path).then(data => JSON.parse(data.toString()));
-
 
 readJSON('./manifest.json')
   .then(files => Promise.all(files.map(file => 
@@ -25,7 +23,7 @@ readJSON('./manifest.json')
       .then(data => {
         const path = 'output.promise/' + f.name + "." + f.extension;
         console.log(`File ${f.name}.${f.extension} has been saved`);
-        writeFile(path, data);
+        return writeFile(path, data);
       })
     )))
 

@@ -12,17 +12,8 @@ const retry = (times, fn) => fn().catch(err => times > 0 ? retry(times - 1, fn) 
 
 const awaitValues = obj => Promise.all(Object.values(obj));
 
-function curry(fn){
-  fn.arguments[0];
-}
+//const arr = [10, 20, 30];
 
-//const map = (fn, arr) => arr.map(fn);
-
-const arr = [10, 20, 30];
-
-const soma = (a, b, c) => a + b + c;
-
-console.log(curry(soma(1,2,3)));
 // Promise.resolve([2,3,4,5,6,7,8,9,10])
 //   .then(map(i => i+1))
 //   .then(filter(i => i % 2 === 0))
